@@ -22,3 +22,10 @@ func ConnectToDatabase(serverName string, connectionString string) {
 	DB = db
 	fmt.Printf("Connected to database server %s\n", serverName)
 }
+
+func InitializeDatabaseConnections() map[string]*sql.DB {
+	databaseConnections := make(map[string]*sql.DB)
+
+	// TODO: Init all the db connection here. Look into how I can get the value from users.
+	return databaseConnections
+}
