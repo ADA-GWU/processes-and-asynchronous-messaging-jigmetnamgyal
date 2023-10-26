@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"sync"
 )
 
 var senderName = "YourName"
@@ -22,4 +23,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	var wg sync.WaitGroup
+	for serverName, db := range databaseConnections {
+		wg.Add(1)
+		go func(serverName string, db *sql.DB) {
+			defer wg.Done()
+			sendMessageToServer(serverName, db, message)
+		}(serverName, db)
+	}
+
+	wg.Wait()
 }
