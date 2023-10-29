@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var senderFullName = "Jigme Namgyalc"
+var senderFullName = "Jigme Namgyal"
 
 func readAvailableMessages(serverName string, db *sql.DB) {
 	query := `
@@ -57,6 +57,7 @@ func readAvailableMessages(serverName string, db *sql.DB) {
 
 func main() {
 	databaseConnections := db.InitializeDatabaseConnections()
+	fmt.Println("Press ctrl+c to exit the program")
 
 	for {
 		var wg sync.WaitGroup

@@ -27,6 +27,7 @@ func sendMessageToServer(serverName string, db *sql.DB, message string) {
 
 func main() {
 	databaseConnections := db.InitializeDatabaseConnections()
+	fmt.Println("Press ctrl+c to exit the program")
 
 	for {
 		var message string
