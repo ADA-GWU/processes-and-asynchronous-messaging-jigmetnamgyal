@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var senderName = "YourName"
+var senderName = "Jigme Namgyal"
 
 func sendMessageToServer(serverName string, db *sql.DB, message string) {
 	query := `
@@ -28,30 +28,33 @@ func sendMessageToServer(serverName string, db *sql.DB, message string) {
 func main() {
 	databaseConnections := db.InitializeDatabaseConnections()
 
-	var message string
-	fmt.Print("Enter a message: ")
+	for {
+		var message string
+		fmt.Print("Enter a message: ")
 
-	scanner := bufio.NewScanner(os.Stdin)
-	if scanner.Scan() {
-		message = scanner.Text()
-	} else {
-		fmt.Println("Failed to read input.")
-		return
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			message = scanner.Text()
+		} else {
+			fmt.Println("Failed to read input.")
+			return
+		}
+
+		if scanner.Err() != nil {
+			fmt.Printf("Error: %v\n", scanner.Err())
+			return
+		}
+
+		var wg sync.WaitGroup
+		for serverName, database := range databaseConnections {
+			wg.Add(1)
+			go func(serverName string, database *sql.DB) {
+				defer wg.Done()
+				sendMessageToServer(serverName, database, message)
+			}(serverName, database)
+		}
+
+		wg.Wait()
 	}
 
-	if scanner.Err() != nil {
-		fmt.Printf("Error: %v\n", scanner.Err())
-		return
-	}
-
-	var wg sync.WaitGroup
-	for serverName, database := range databaseConnections {
-		wg.Add(1)
-		go func(serverName string, database *sql.DB) {
-			defer wg.Done()
-			sendMessageToServer(serverName, database, message)
-		}(serverName, database)
-	}
-
-	wg.Wait()
 }
