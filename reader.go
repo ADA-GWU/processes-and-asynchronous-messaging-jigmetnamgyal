@@ -43,7 +43,7 @@ func readAvailableMessages(serverName string, db *sql.DB) {
 			continue
 		}
 
-		fmt.Printf("Sender %s sent %s at time %s.\n", senderName, message, currentTime)
+		fmt.Printf("Sender `%s` sent `%s` at time `%s`.\n", senderName, message, currentTime)
 
 		updateQuery := "UPDATE ASYNC_MESSAGE SET RECEIVED_TIME = $1 WHERE ID = $2"
 
