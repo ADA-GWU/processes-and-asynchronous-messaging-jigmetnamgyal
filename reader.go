@@ -9,13 +9,15 @@ import (
 	"time"
 )
 
+var senderFullName = "ashfjkasn"
+
 func readAvailableMessages(serverName string, db *sql.DB) {
 	query := `
 		SELECT ID, SENDER_NAME, MESSAGE, "CURRENT_TIME" FROM ASYNC_MESSAGE 
 	  	WHERE RECEIVED_TIME IS NULL AND SENDER_NAME != $1 FOR UPDATE
 	`
 
-	rows, err := db.Query(query, senderName)
+	rows, err := db.Query(query, senderFullName)
 
 	if err != nil {
 		log.Printf("Error reading messages from %s: %v", serverName, err)
@@ -56,15 +58,18 @@ func readAvailableMessages(serverName string, db *sql.DB) {
 func main() {
 	databaseConnections := db.InitializeDatabaseConnections()
 
-	var wg sync.WaitGroup
+	for {
+		var wg sync.WaitGroup
 
-	for serverName, database := range databaseConnections {
-		wg.Add(1)
-		go func(serverName string, database *sql.DB) {
-			defer wg.Done()
-			readAvailableMessages(serverName, database)
-		}(serverName, database)
+		for serverName, database := range databaseConnections {
+			wg.Add(1)
+			go func(serverName string, database *sql.DB) {
+				defer wg.Done()
+				readAvailableMessages(serverName, database)
+			}(serverName, database)
+		}
+
+		wg.Wait()
 	}
 
-	wg.Wait()
 }
