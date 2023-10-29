@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var senderName = "boss"
+var senderName = "Jigme Namgyal"
 
 func sendMessageToServer(serverName string, db *sql.DB, message string) {
 	query := `

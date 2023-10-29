@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var senderFullName = "ashfjkasn"
+var senderFullName = "Jigme Namgyalc"
 
 func readAvailableMessages(serverName string, db *sql.DB) {
 	query := `
@@ -33,17 +33,17 @@ func readAvailableMessages(serverName string, db *sql.DB) {
 
 	for rows.Next() {
 		var id int
-		var senderName string
+		var sendername string
 		var message string
 		var currentTime time.Time
-		err = rows.Scan(&id, &senderName, &message, &currentTime)
+		err = rows.Scan(&id, &sendername, &message, &currentTime)
 
 		if err != nil {
 			log.Printf("Error scanning rows from %s: %v", serverName, err)
 			continue
 		}
 
-		fmt.Printf("Sender `%s` sent `%s` at time `%s`.\n", senderName, message, currentTime)
+		fmt.Printf("Sender `%s` sent `%s` at time `%s`.\n", sendername, message, currentTime)
 
 		updateQuery := "UPDATE ASYNC_MESSAGE SET RECEIVED_TIME = $1 WHERE ID = $2"
 
