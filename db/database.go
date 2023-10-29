@@ -16,7 +16,7 @@ func InitializeDatabaseConnections() map[string]*sql.DB {
 	databaseInfo := []DatabaseInfo{
 		{
 			ServerName:       "Server1",
-			ConnectionString: "postgres://jtn:jtn11@localhost:5432/assignment_db?sslmode=disable",
+			ConnectionString: "postgres://assignment:assignment11@192.168.1.35:5432/assignment_db?sslmode=disable",
 		},
 	}
 
